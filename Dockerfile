@@ -25,4 +25,5 @@ COPY --from=build /app/build/libs/app.jar .
 EXPOSE 8080
 
 COPY start.sh .
+RUN chmod +x start.sh
 CMD ["/app/start.sh"]
