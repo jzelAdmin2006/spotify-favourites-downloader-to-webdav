@@ -12,8 +12,10 @@ import java.util.concurrent.ExecutorService;
 @Service
 @AllArgsConstructor
 public class DownloadWebDavService {
-    public static final String HQ = "320";
     public static final String LQ = "128";
+    public static final String HQ = "flac";
+    public static final String LQ_FILE_ENDING_REGEX = "\\.mp3$";
+    public static final String HQ_FILE_ENDING = ".flac";
 
     private final ExecutorService downloadExecutor;
     private final ExecutorService davExecutor;
@@ -36,7 +38,8 @@ public class DownloadWebDavService {
     private void deleteDownloadedLQTracksFromDav() {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(Path.of("./tmp"))) {
             stream.forEach(filePath -> {
-                terminal.execute(String.format("rclone delete MYWEBDAV:/\"%s\"", filePath.getFileName()));
+                terminal.execute(String.format("rclone delete MYWEBDAV:/\"%s\"", filePath.getFileName().toString().replaceAll(
+                    LQ_FILE_ENDING_REGEX, HQ_FILE_ENDING)));
                 try {
                     Files.delete(filePath);
                 } catch (IOException e) {
