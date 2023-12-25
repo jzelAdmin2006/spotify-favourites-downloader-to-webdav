@@ -2,7 +2,7 @@
 FROM gradle:jdk17 AS build
 WORKDIR /app
 COPY . /app
-RUN ./gradlew build
+RUN ./gradlew bootJar
 
 # Runtime
 FROM eclipse-temurin:17
