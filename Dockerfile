@@ -2,6 +2,7 @@
 FROM gradle:jdk17 AS build
 WORKDIR /app
 COPY . /app
+RUN chmod +x ./gradlew
 RUN ./gradlew bootJar
 
 # Runtime
