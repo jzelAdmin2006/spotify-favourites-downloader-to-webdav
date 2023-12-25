@@ -36,7 +36,7 @@ public class DownloadWebDavService {
     private void deleteDownloadedLQTracksFromDav() {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(Path.of("./tmp"))) {
             stream.forEach(filePath -> {
-                terminal.execute(String.format("rclone delete MYWEBDAV:/%s", filePath.getFileName()));
+                terminal.execute(String.format("rclone delete MYWEBDAV:/\"%s\"", filePath.getFileName()));
                 try {
                     Files.delete(filePath);
                 } catch (IOException e) {
