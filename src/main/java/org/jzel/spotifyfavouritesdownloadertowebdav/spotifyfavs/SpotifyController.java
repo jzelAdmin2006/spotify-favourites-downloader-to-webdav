@@ -30,14 +30,4 @@ public class SpotifyController {
         auth.setRefreshToken(tokens.getSecond());
         return ResponseEntity.ok("Authentication successful!");
     }
-
-    /**
-     * @deprecated Only for testing purposes
-     */
-    @PostMapping("/trigger")
-    @Deprecated(forRemoval = true)
-    public ResponseEntity<String> triggerDownload() {
-        spotifyService.dailyUpdateFavourites();
-        return ResponseEntity.ok("Update triggered!");
-    }
 }

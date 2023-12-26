@@ -63,10 +63,6 @@ public class SpotifyService {
         return trackIds;
     }
 
-    /**
-     * @deprecated Only call this manually for testing purposes
-     */
-    @Deprecated
     @Scheduled(fixedRate = 12 * 3600 * 1000)
     void dailyUpdateFavourites() {
         if (auth.getAccessToken().isPresent()) {
