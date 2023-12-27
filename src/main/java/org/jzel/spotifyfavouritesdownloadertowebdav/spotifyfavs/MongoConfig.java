@@ -15,7 +15,7 @@ public class MongoConfig {
     private String host;
     private String username;
     private String password;
-    private String db;
+    private String database;
 
     @Bean
     public MongoTemplate mongoTemplate() {
@@ -24,6 +24,6 @@ public class MongoConfig {
 
     @Bean
     public MongoDatabaseFactory mongoDbFactory() {
-        return new SimpleMongoClientDatabaseFactory(String.format("mongodb+srv://%s:%s@%s/%s", username, password, host, db));
+        return new SimpleMongoClientDatabaseFactory(String.format("mongodb+srv://%s:%s@%s/%s", username, password, host, database));
     }
 }
