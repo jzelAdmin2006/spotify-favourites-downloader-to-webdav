@@ -1,6 +1,7 @@
 package org.jzel.spotifyfavouritesdownloadertowebdav.dldav;
 
 import lombok.AllArgsConstructor;
+import org.jzel.spotifyfavouritesdownloadertowebdav.spotifyfavs.QualityConfig;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -13,17 +14,24 @@ import java.util.concurrent.ExecutorService;
 @AllArgsConstructor
 public class DownloadWebDavService {
     public static final String LQ = "128";
-    public static final String HQ = "flac";
     public static final String LQ_FILE_ENDING_REGEX = "\\.mp3$";
-    public static final String HQ_FILE_ENDING = ".flac";
 
     private final ExecutorService downloadExecutor;
     private final ExecutorService davExecutor;
     private final Terminal terminal;
+    private final QualityConfig qualityConfig;
+
+    public String getHQ() {
+        return qualityConfig.isFlacMode() ? "flac" : "320";
+    }
+
+    public String getHQFileEnding() {
+        return qualityConfig.isFlacMode() ? ".flac" : ".mp3";
+    }
 
     public void downloadTrack(String trackId) {
         downloadExecutor.submit(() -> {
-            downloadTrackWithDeemix(trackId, HQ);
+            downloadTrackWithDeemix(trackId, getHQ());
             davExecutor.submit(this::uploadToWebDav);
         });
     }
@@ -39,7 +47,7 @@ public class DownloadWebDavService {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(Path.of("./tmp"))) {
             stream.forEach(filePath -> {
                 terminal.execute(String.format("rclone delete MYWEBDAV:/\"%s\"", filePath.getFileName().toString().replaceAll(
-                    LQ_FILE_ENDING_REGEX, HQ_FILE_ENDING)));
+                    LQ_FILE_ENDING_REGEX, getHQFileEnding())));
                 try {
                     Files.delete(filePath);
                 } catch (IOException e) {
