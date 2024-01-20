@@ -2,6 +2,7 @@ package org.jzel.spotifyfavouritesdownloadertowebdav.spotifyfavs;
 
 import kotlin.Pair;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,6 @@ public class SpotifyController {
 
     private final AuthService spotifyAuthService;
     private final Auth auth;
-    private final SpotifyService spotifyService;
 
     @GetMapping("/token")
     public ResponseEntity<Void> initiateAuthentication() {
@@ -24,10 +24,10 @@ public class SpotifyController {
     }
 
     @GetMapping("/callback")
-    public ResponseEntity<String> callback(@RequestParam String code) {
+    public ResponseEntity<ClassPathResource> callback(@RequestParam String code) {
         Pair<String, String> tokens = spotifyAuthService.getTokensFromCode(code);
         auth.setAccessToken(tokens.getFirst());
         auth.setRefreshToken(tokens.getSecond());
-        return ResponseEntity.ok("Authentication successful!");
+        return ResponseEntity.ok().body(new ClassPathResource("static/login-success.html"));
     }
 }
