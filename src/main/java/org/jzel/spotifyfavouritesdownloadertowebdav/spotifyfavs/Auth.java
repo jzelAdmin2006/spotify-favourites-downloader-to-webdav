@@ -18,4 +18,7 @@ public class Auth {
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = Optional.of(refreshToken);
     }
+    public void resetRefreshToken() {
+        this.refreshToken = Optional.empty();
+    }
 }

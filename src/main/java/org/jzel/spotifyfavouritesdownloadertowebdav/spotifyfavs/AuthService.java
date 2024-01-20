@@ -54,6 +54,7 @@ public class AuthService {
                 String newAccessToken = jsonResponse.getString("access_token");
                 auth.setAccessToken(newAccessToken);
             } else {
+                auth.resetRefreshToken();
                 emailSenderService.sendReauthAlert();
                 throw new RuntimeException("Failed to refresh token: " + response.body().string());
             }
