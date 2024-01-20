@@ -7,6 +7,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONObject;
+import org.jzel.spotifyfavouritesdownloadertowebdav.mailalert.EmailSenderService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class AuthService {
 
     private final Auth auth;
     private final SpotifyConfig config;
+    private final EmailSenderService emailSenderService;
 
     @Scheduled(fixedRate = 3540 * 1000)
     void hourlyRefresh() {
@@ -52,6 +54,7 @@ public class AuthService {
                 String newAccessToken = jsonResponse.getString("access_token");
                 auth.setAccessToken(newAccessToken);
             } else {
+                emailSenderService.sendReauthAlert();
                 throw new RuntimeException("Failed to refresh token: " + response.body().string());
             }
         } catch (IOException e) {
