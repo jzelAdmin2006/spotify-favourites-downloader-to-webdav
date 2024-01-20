@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# App config files that should not be checked in to version control
+.env
+/config
