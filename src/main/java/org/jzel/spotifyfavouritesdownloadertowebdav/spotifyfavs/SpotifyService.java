@@ -63,8 +63,8 @@ public class SpotifyService {
         return trackIds;
     }
 
-    @Scheduled(fixedRate = 5 * 60 * 1000)
-    void dailyUpdateFavourites() {
+    @Scheduled(fixedRate = 60 * 60 * 1000)
+    void hourlyUpdateFavourites() {
         if (auth.getAccessToken().isPresent()) {
             List<String> previousFavoriteTrackIds = trackRepository.findAll().stream().map(Track::getId).toList();
             List<String> favoriteTrackIds = getFavoriteTrackIds(auth.getAccessToken().orElseThrow());
